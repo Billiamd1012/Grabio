@@ -22,4 +22,8 @@ public class Main extends Game implements ApplicationListener {
 
         setScreen(menuScreen);
     }
+
+    public void setToGameScreen(){
+        setScreen(gameScreen);
+    }
 }
