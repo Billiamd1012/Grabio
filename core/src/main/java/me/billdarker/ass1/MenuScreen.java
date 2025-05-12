@@ -14,8 +14,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class MenuScreen implements Screen {
-    /*
-    Menu screen implements the ui for the game start screen including options for closing the application accessing the pause menu and setting intial game conditions.
+    /**
+     * Handles all main menu user interface elements and interactions.
+     * This screen is responsible for displaying the game title, menu options,
+     * and processing user input for menu navigation. It provides options for
+     * starting the game, accessing settings, and other main menu functionality.
      */
 
     Main game;
