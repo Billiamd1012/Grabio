@@ -37,13 +37,12 @@ public class Map {
     }
 
     public void draw(SpriteBatch batch) {
+        ShapeRenderer shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                // Get color based on tile type
                 Color tileColor = getTileColor(tiles[x][y]);
-
-                // Draw rectangle for this tile
-                ShapeRenderer shapeRenderer = new ShapeRenderer();
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                 shapeRenderer.setColor(tileColor);
                 shapeRenderer.rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
