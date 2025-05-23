@@ -12,6 +12,7 @@ import me.billdarker.ass1.overlay.Camera;
 import me.billdarker.ass1.overlay.InputDetector;
 import me.billdarker.ass1.overlay.TouchHandler;
 import me.billdarker.ass1.world.Map;
+import me.billdarker.ass1.world.Player;
 
 public class GameScreen implements Screen {
     /**
@@ -26,6 +27,7 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private Stage stage;
     private Map map;
+    private Player neutralPlayer; // A neutral player for unowned tiles
 
     private float viewportWidth = 100f;
     private float viewportHeight = 100f;
@@ -40,6 +42,7 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
         stage = new Stage();
         map = new Map(20, 20); // Create a 20x20 tile map
+        neutralPlayer = new Player(); // Create a neutral player for unowned tiles
 
         float width = Gdx.graphics.getWidth();
         float height = Gdx.graphics.getHeight();
@@ -54,11 +57,9 @@ public class GameScreen implements Screen {
         for(int x = 0; x < map.getWidth(); x++) {
             for(int y = 0; y < map.getHeight(); y++) {
                 // If x+y is even, set to green (0), if odd set to gray (1)
-                map.setTile(x, y, (x + y) % 2 == 0 ? 0 : 1);
+                map.setTile(x, y, (x + y) % 2 == 0 ? 0 : 1, neutralPlayer);
             }
         }
-
-
     }
 
     @Override
@@ -97,7 +98,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        batch.dispose();
+        stage.dispose();
     }
 
 }

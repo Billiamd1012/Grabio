@@ -30,7 +30,6 @@ public class TouchHandler implements GestureDetector.GestureListener {
         Gdx.app.log("TouchHandler", "Tapped tile at: " + tileX + ", " + tileY);
         
         // You can also change the tile color to show it was tapped
-        map.setTile(tileX, tileY, 2);  // Change to blue (2) when tapped
         
         return true;
     }
