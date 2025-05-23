@@ -5,9 +5,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import me.billdarker.ass1.overlay.Camera;
+import me.billdarker.ass1.overlay.InputDetector;
+import me.billdarker.ass1.overlay.TouchHandler;
 import me.billdarker.ass1.world.Map;
 
 public class GameScreen implements Screen {
@@ -41,6 +44,10 @@ public class GameScreen implements Screen {
         float width = Gdx.graphics.getWidth();
         float height = Gdx.graphics.getHeight();
         camera = new Camera();
+
+        GestureDetector.GestureListener touchHandler = new TouchHandler(camera, map);
+        GestureDetector InputDetector = new InputDetector(touchHandler);
+        Gdx.input.setInputProcessor(InputDetector);
         // Set viewport to match map size (20 tiles * 32 pixels)
 
         // Initialize tiles in a checkerboard pattern
@@ -50,6 +57,8 @@ public class GameScreen implements Screen {
                 map.setTile(x, y, (x + y) % 2 == 0 ? 0 : 1);
             }
         }
+
+
     }
 
     @Override
@@ -58,7 +67,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Update camera position if needed
-        camera.update(batch);
+        camera.update(delta,batch);
 
         batch.begin();
         map.draw(batch);
@@ -90,4 +99,5 @@ public class GameScreen implements Screen {
     public void dispose() {
 
     }
+
 }

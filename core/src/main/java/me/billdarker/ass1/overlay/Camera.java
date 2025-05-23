@@ -11,29 +11,59 @@ public class Camera {
 
     public OrthographicCamera camera;
 
-    private float viewportWidth = 300f;
-    private float viewportHeight = 100f;
+    private float viewportWidth = 640f;
+    private float viewportHeight = 640f;
+    private float xMoveScaling = 1f;
+    private float yMoveScaling = 1f;
+
+    private float nextX;
+    private float nextY;
 
     private Texture texture;
 
     public Camera() {
         float width = Gdx.graphics.getWidth();
         float height = Gdx.graphics.getHeight();
-        camera = new OrthographicCamera(viewportWidth, viewportHeight*height/width);
-        camera.position.set(300,0,0);
+        
+        float aspectRatio = width / height;
+        if (aspectRatio > 1) {
+            viewportWidth = viewportHeight * aspectRatio;
+        } else {
+            viewportHeight = viewportWidth / aspectRatio;
+        }
+        
+        camera = new OrthographicCamera(viewportWidth, viewportHeight);
+        camera.position.set(viewportWidth/2, viewportHeight/2, 0);
         camera.update();
     }
 
     public void resize(int width, int height) {
+        float aspectRatio = width / (float)height;
+        if (aspectRatio > 1) {
+            viewportWidth = viewportHeight * aspectRatio;
+        } else {
+            viewportHeight = viewportWidth / aspectRatio;
+        }
+        
         camera.viewportWidth = viewportWidth;
-        camera.viewportHeight = viewportHeight * height/width;
+        camera.viewportHeight = viewportHeight;
         camera.update();
     }
 
-    public void update(SpriteBatch batch){
-        camera.translate(camera.position.x+2,camera.position.y);
+    public void update(float delta, SpriteBatch batch) {
+        camera.translate(nextX * delta, nextY * delta);
         camera.update();
-        Gdx.app.log("Camera","Moved camera to "+camera.position.x);
         batch.setProjectionMatrix(camera.combined);
+    }
+
+    public void slidePosition(float deltaX, float deltaY) {
+        nextX = -deltaX * xMoveScaling;
+        nextY = deltaY * yMoveScaling;
+        Gdx.app.log("Camera", "Delta readings x " + deltaX + " y " + deltaY + " nextX " + nextX + " nextY " + nextY);
+    }
+
+    public void stopMovement() {
+        nextX = 0;
+        nextY = 0;
     }
 }

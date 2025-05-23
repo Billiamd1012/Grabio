@@ -3,6 +3,8 @@ package me.billdarker.ass1.world;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector3;
 
 public class Map {
     /**
@@ -14,14 +16,13 @@ public class Map {
      * - 2: Blue
      * - 3: Brown
      * - default: White
-     *
      * The map has a fixed width and height, and each tile has a standard size of 32 pixels.
      * Tiles can be set individually using coordinates, and the entire map can be rendered
      * using a SpriteBatch.
      */
-    private int width;
-    private int height;
-    private int[][] tiles; // 2D array to store tile types
+    private final int width;
+    private final int height;
+    private final int[][] tiles; // 2D array to store tile types
     private static final int TILE_SIZE = 32; // Size of each tile in pixels
 
     public Map(int width, int height) {
@@ -39,7 +40,7 @@ public class Map {
     public void draw(SpriteBatch batch) {
         ShapeRenderer shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-        
+
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 Color tileColor = getTileColor(tiles[x][y]);
@@ -74,4 +75,15 @@ public class Map {
         return height;
     }
 
+    public int[] screenToTileCoordinates(float screenX, float screenY, OrthographicCamera camera) {
+        // Convert screen coordinates to world coordinates
+        Vector3 worldCoords = new Vector3(screenX, screenY, 0);
+        camera.unproject(worldCoords);
+
+        // Convert world coordinates to tile coordinates
+        int tileX = (int)(worldCoords.x / TILE_SIZE);
+        int tileY = (int)(worldCoords.y / TILE_SIZE);
+
+        return new int[]{tileX, tileY};
+    }
 }
