@@ -3,7 +3,6 @@ package me.billdarker.ass1;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -13,6 +12,7 @@ import me.billdarker.ass1.overlay.InputDetector;
 import me.billdarker.ass1.overlay.TouchHandler;
 import me.billdarker.ass1.world.Map;
 import me.billdarker.ass1.world.Player;
+import me.billdarker.ass1.world.playerType;
 
 public class GameScreen implements Screen {
     /**
@@ -27,11 +27,12 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private Stage stage;
     private Map map;
-    private Player neutralPlayer; // A neutral player for unowned tiles
+    private Player player;
 
     private float viewportWidth = 100f;
     private float viewportHeight = 100f;
     private Camera camera;
+    private float lastUpdateTime = 0f;
 
     public GameScreen(Main game) {
         this.game = game;
@@ -42,7 +43,8 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
         stage = new Stage();
         map = new Map(20, 20); // Create a 20x20 tile map
-        neutralPlayer = new Player(); // Create a neutral player for unowned tiles
+        player = new Player(map, playerType.PLAYER, "Player"); // Create a neutral player for unowned tiles
+
 
         float width = Gdx.graphics.getWidth();
         float height = Gdx.graphics.getHeight();
@@ -53,19 +55,22 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(InputDetector);
         // Set viewport to match map size (20 tiles * 32 pixels)
 
-        // Initialize tiles in a checkerboard pattern
-        for(int x = 0; x < map.getWidth(); x++) {
-            for(int y = 0; y < map.getHeight(); y++) {
-                // If x+y is even, set to green (0), if odd set to gray (1)
-                map.setTile(x, y, (x + y) % 2 == 0 ? 0 : 1, neutralPlayer);
-            }
-        }
+        //set start tile
+        player.setStart(0,0);
+
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        // Update game state every 100ms (10 times per second)
+        lastUpdateTime += delta;
+        if (lastUpdateTime >= 0.1f) {
+            update();
+            lastUpdateTime = 0f;
+        }
 
         // Update camera position if needed
         camera.update(delta,batch);
@@ -100,6 +105,11 @@ public class GameScreen implements Screen {
     public void dispose() {
         batch.dispose();
         stage.dispose();
+    }
+
+//    gamestate update runs 10 times per second
+    public void update(){
+        player.update();
     }
 
 }

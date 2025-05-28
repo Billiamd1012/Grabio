@@ -32,7 +32,7 @@ public class Tile {
         this.x = _x;
         this.y = _y;
         this.owner = _owner;
-        
+
         switch (_terrainType) {
             case 0:
                 terrain = TERRAIN.GRASS;
@@ -66,17 +66,25 @@ public class Tile {
     }
 
     private Color getTileColor() {
-        switch (terrain) {
-            case GRASS:
-                return Color.GREEN;
-            case DESERT:
-                return Color.GRAY;
-            case MOUNTAIN:
-                return Color.BLUE;
-            case SWAMP:
-                return Color.BROWN;
-            default:
-                return Color.WHITE;
+        if (owner.getType() == playerType.PLAYER){
+            //TODO: get colour from player
+            return Color.RED;
+        } else if (owner.getType() == playerType.BOT) {
+            return Color.GRAY;
+        }
+        else {
+            switch (terrain) {
+                case GRASS:
+                    return Color.GREEN;
+                case DESERT:
+                    return Color.GRAY;
+                case MOUNTAIN:
+                    return Color.BLUE;
+                case SWAMP:
+                    return Color.BROWN;
+                default:
+                    return Color.WHITE;
+            }
         }
     }
 
@@ -86,5 +94,13 @@ public class Tile {
 
     public int getY() {
         return y;
+    }
+
+    public float getGrowthRate(){
+        return growthRate;
+    }
+
+    public void setOwner(Player _owner){
+        owner = _owner;
     }
 }
