@@ -24,7 +24,6 @@ public class Player {
 
     public void setStart(int x, int y){
         map.setOwner(x,y,this);
-
     }
     public void update(){
         playerTiles = map.getTiles(this);
@@ -60,5 +59,10 @@ public class Player {
 
     public playerType getType() {
         return type;
+    }
+
+    public void attack(Player target){
+        //TODO:ask map if there are any tiles matching the target adjacent to player tile
+
     }
 }
