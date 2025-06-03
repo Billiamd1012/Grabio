@@ -4,10 +4,10 @@ import com.badlogic.gdx.Gdx;
 
 public class Attack {
     //This class is owned by territory and is created each time a territory attacks and object
-    private final Territory attacker;
+    private final Player attacker;
     private final Player defender;
     private float attackingTroops;
-    public Attack(Territory _attacker, Player _defender, float _attackingTroops){
+    public Attack(Player _attacker, Player _defender, float _attackingTroops){
         attacker = _attacker;
         defender = _defender;
         attackingTroops = _attackingTroops;
@@ -17,6 +17,6 @@ public class Attack {
 
     public void update(){
         //each update call defend on defender which takes away some troops
-        attackingTroops = defender.defend(attackingTroops);
+        attackingTroops = defender.defend(attacker, attackingTroops);
     }
 }

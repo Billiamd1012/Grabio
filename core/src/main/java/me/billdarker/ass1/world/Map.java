@@ -109,7 +109,7 @@ public class Map {
         return playerTiles;
     }
 
-    public boolean isAdjacent(Territory attacking, Tile tile) {
+    public boolean isAdjacent(Player attacking, Tile tile) {
         List<Tile> attackingTiles = attacking.getTiles();
 
         Player defender = tile.owner;
@@ -126,13 +126,19 @@ public class Map {
         return false;
     }
 
+    public boolean isBordering(Player attacking, Tile tile){
+        List<Tile> attackingTiles = attacking.getTiles();
+        for (Tile attackTile : attackingTiles) {
+            if (areTilesAdjacent(attackTile, tile)){
+                return  true;
+            }
+        }
+        return false;
+    }
+
     private boolean areTilesAdjacent(Tile tile1, Tile tile2) {
         int dx = Math.abs(tile1.getX() - tile2.getX());
         int dy = Math.abs(tile1.getY() - tile2.getY());
         return (dx == 1 && dy == 0) || (dx == 0 && dy == 1);
-    }
-
-    public void attack(Territory attacker){
-        
     }
 }

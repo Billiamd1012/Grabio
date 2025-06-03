@@ -57,7 +57,7 @@ public class Player {
         territory.attack(tile);
     }
 
-    public float defend(float attackingTroops){
-        return territory.defend(attackingTroops);
+    public float defend(Player attacker, float attackingTroops){
+        return territory.defend(attacker, attackingTroops);
     }
 }
