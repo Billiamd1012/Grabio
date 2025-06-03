@@ -4,14 +4,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 import me.billdarker.ass1.world.Map;
+import me.billdarker.ass1.world.Player;
 
 public class TouchHandler implements GestureDetector.GestureListener {
     Camera camera;
     Map map;
+    Player player;
 
-    public TouchHandler(Camera _camera, Map _map) {
+    public TouchHandler(Camera _camera, Map _map, Player _player) {
         camera = _camera;
         map = _map;
+        player = _player;
     }
 
     @Override
@@ -25,12 +28,11 @@ public class TouchHandler implements GestureDetector.GestureListener {
         int[] tileCoords = map.screenToTileCoordinates(x, y, camera.camera);
         int tileX = tileCoords[0];
         int tileY = tileCoords[1];
-        
+        map.tapTile(player, tileX, tileY);
         // Log the tapped tile coordinates
         Gdx.app.log("TouchHandler", "Tapped tile at: " + tileX + ", " + tileY);
-        
         // You can also change the tile color to show it was tapped
-        
+
         return true;
     }
 

@@ -35,18 +35,32 @@ public class Map {
     }
 
     public void setOwner(int x, int y, Player owner) {
-        if (x >= 0 && x < width && y >= 0 && y < height) {
+        if (x >= 0 && x < width && y >= 0 && y < height && tiles[x][y] != null) {
+            Player oldOwner = tiles[x][y].owner;
+            if (oldOwner != null) {
+                oldOwner.removeTile(tiles[x][y]);
+            }
             tiles[x][y].setOwner(owner);
+            owner.addTile(tiles[x][y]);
         }
+    }
+    public void tapTile(Player _player, int x, int y){
+        Tile tile = getTile(x, y);
+        _player.attack(tile);
+    }
+    public Tile getTile(int x, int y) {
+        if (x >= 0 && x < width && y >= 0 && y < height) {
+            return tiles[x][y];
+        }
+        return null;
     }
 
     public void spawnTile(int x, int y, int tileType, Player owner) {
         if (x >= 0 && x < width && y >= 0 && y < height) {
             tiles[x][y] = new Tile(owner, tileType, x, y);
+            owner.addTile(tiles[x][y]);
         }
     }
-
-
 
     public void draw(SpriteBatch batch) {
         ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -94,5 +108,31 @@ public class Map {
 
         return playerTiles;
     }
-    
+
+    public boolean isAdjacent(Territory attacking, Tile tile) {
+        List<Tile> attackingTiles = attacking.getTiles();
+
+        Player defender = tile.owner;
+
+        List<Tile> defendingTiles = defender.getTiles();
+
+        for (Tile attackTile : attackingTiles) {
+            for (Tile defendTile : defendingTiles) {
+                if (areTilesAdjacent(attackTile, defendTile)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean areTilesAdjacent(Tile tile1, Tile tile2) {
+        int dx = Math.abs(tile1.getX() - tile2.getX());
+        int dy = Math.abs(tile1.getY() - tile2.getY());
+        return (dx == 1 && dy == 0) || (dx == 0 && dy == 1);
+    }
+
+    public void attack(Territory attacker){
+        
+    }
 }

@@ -22,16 +22,19 @@ public class Tile {
         - Terrain type
     */
     public Player owner;
+    private float population;
     private float growthRate;
     private float defenseRate;
     private TERRAIN terrain;
     private static final int TILE_SIZE = 32; // Size of each tile in pixels
-    private int x, y; // Position in the grid
+    private final int x, y;
+    private static final float MIN_POPULATION = 1f;
 
     public Tile(Player _owner, int _terrainType, int _x, int _y) {
         this.x = _x;
         this.y = _y;
         this.owner = _owner;
+        this.population = MIN_POPULATION;
 
         switch (_terrainType) {
             case 0:
@@ -102,5 +105,21 @@ public class Tile {
 
     public void setOwner(Player _owner){
         owner = _owner;
+    }
+
+    public float getPopulation() {
+        return population;
+    }
+
+    public void setPopulation(float population) {
+        this.population = Math.max(MIN_POPULATION, population);
+    }
+
+    public void addPopulation(float amount) {
+        this.population = Math.max(MIN_POPULATION, this.population + amount);
+    }
+
+    public void removePopulation(float amount) {
+        this.population = Math.max(MIN_POPULATION, this.population - amount);
     }
 }

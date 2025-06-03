@@ -50,7 +50,7 @@ public class GameScreen implements Screen {
         float height = Gdx.graphics.getHeight();
         camera = new Camera();
 
-        GestureDetector.GestureListener touchHandler = new TouchHandler(camera, map);
+        GestureDetector.GestureListener touchHandler = new TouchHandler(camera, map, player);
         GestureDetector InputDetector = new InputDetector(touchHandler);
         Gdx.input.setInputProcessor(InputDetector);
         // Set viewport to match map size (20 tiles * 32 pixels)

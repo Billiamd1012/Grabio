@@ -4,65 +4,60 @@ import com.badlogic.gdx.Gdx;
 import java.util.List;
 
 public class Player {
-    // maxTroops will be a product of the number of tiles
     private String name;
     private playerType type;
-    private float maxTroops;
-    private float maxTroopsMultiplier = 10;
-    // troopCount will increase each turn (maxTroops/troopCount)*troopCount*avg(growthrate)
-    private float troopCount = 50f;
-    private List<Tile> playerTiles;
+    private final Territory territory;
     private final Map map;
 
-    //Create a new player with a reference to the map and a int to represent player type PLAYER:0, BOT:1, WILD:2
-    public Player(Map _map, playerType _type, String _name){
+    public Player(Map _map, playerType _type, String _name) {
         map = _map;
         name = _name;
         type = _type;
-        //set start tile
+        territory = new Territory(this, map);
     }
 
-    public void setStart(int x, int y){
-        map.setOwner(x,y,this);
-    }
-    public void update(){
-        playerTiles = map.getTiles(this);
-        maxTroops = playerTiles.size() * maxTroopsMultiplier;
-        float avgGrowthRate = getAverageGrowthRate();
-        float growthRate = calculateGrowthRate(avgGrowthRate, maxTroops, troopCount);
-        troopCount += growthRate;
-        Gdx.app.log("Player","Current growth rate: "+growthRate+" troopCount: "+troopCount+" maxTroops: "+maxTroops);
-        // Ensure we don't exceed max troops
-        troopCount = Math.min(troopCount, maxTroops);
-    }
-
-    private float getAverageGrowthRate() {
-        if (playerTiles.isEmpty()) return 0;
-
-        float growthRateSum = 0;
-        for (Tile tile : playerTiles) {
-            growthRateSum += tile.getGrowthRate();
+    public void setStart(int x, int y) {
+        map.setOwner(x, y, this);
+        // Add the tile to the territory
+        Tile startTile = map.getTile(x, y);
+        if (startTile != null) {
+            territory.addTile(startTile);
         }
-        return growthRateSum / playerTiles.size();
     }
 
-    private float calculateGrowthRate(float avgGrowthRate, float maxTroops, float currentTroops) {
-        if (maxTroops <= 0 || currentTroops <= 0) return 0;
+    public void update() {
+        territory.update();
+    }
 
-        // Calculate the logistic growth factor
-        // This creates a bell curve that peaks at maxTroops/2
-        float logisticFactor = 0.1f * (currentTroops / maxTroops) * (1 - (currentTroops / maxTroops));
+    public void addTile(Tile tile) {
+        territory.addTile(tile);
+    }
 
-        // Apply the growth rate
-        return currentTroops * avgGrowthRate * logisticFactor;
+    public void removeTile(Tile tile) {
+        territory.removeTile(tile);
+    }
+
+    public float getPopulation() {
+        return territory.getPopulation();
+    }
+
+    public float getMaxPopulation() {
+        return territory.getMaxPopulation();
+    }
+
+    public List<Tile> getTiles() {
+        return territory.getTiles();
     }
 
     public playerType getType() {
         return type;
     }
 
-    public void attack(Player target){
-        //TODO:ask map if there are any tiles matching the target adjacent to player tile
+    public void attack(Tile tile){
+        territory.attack(tile);
+    }
 
+    public float defend(float attackingTroops){
+        return territory.defend(attackingTroops);
     }
 }
