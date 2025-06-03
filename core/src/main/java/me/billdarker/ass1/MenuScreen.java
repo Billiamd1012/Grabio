@@ -5,13 +5,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class MenuScreen implements Screen {
     /**
@@ -27,6 +32,13 @@ public class MenuScreen implements Screen {
     private Stage stage;
     private BitmapFont font;
     private float scaleFactor = 5f;
+    Texture play = new Texture("Grabio_Play.png");
+    Texture name = new Texture("Grabio_lable.png");
+    Texture exit = new Texture("Grabio_Exit.png");
+    Texture about = new Texture("Grabio_About.png");
+    TextureRegionDrawable drawable_play = new TextureRegionDrawable(new TextureRegion(play));
+    TextureRegionDrawable drawable_exit = new TextureRegionDrawable(new TextureRegion(exit));
+    TextureRegionDrawable drawable_about = new TextureRegionDrawable(new TextureRegion(about));
 
     public MenuScreen(Main game) {
         this.game = game;
@@ -39,34 +51,42 @@ public class MenuScreen implements Screen {
         batch = new SpriteBatch();
         stage = new Stage();
 
-        Label label = new Label("Grabio", new Label.LabelStyle(font, Color.WHITE));
-        label.setFontScale(scaleFactor);
-        label.setPosition(Gdx.graphics.getWidth() / 2f - label.getWidth() * scaleFactor / 2f,
-                         Gdx.graphics.getHeight() / 2f - label.getHeight() * scaleFactor / 2f);
-        stage.addActor(label);
 
-        // Create a TextButton for better interactivity
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.font = font;
-        textButtonStyle.fontColor = Color.WHITE;
-        TextButton playButton = new TextButton("Play", textButtonStyle);
-        playButton.getLabel().setFontScale(scaleFactor * 0.8f);
+        Table table = new Table();
 
-        // Position the button below the title
-        playButton.setPosition(
-            Gdx.graphics.getWidth() / 2f - playButton.getWidth() * scaleFactor * 0.8f / 2f,
-            Gdx.graphics.getHeight() / 2f - playButton.getHeight() * scaleFactor * 0.8f / 2f - 100
-        );
+        table.setFillParent(true); // Makes the table fill the stage
+        stage.addActor(table);
 
-        // Make it interactive
-        playButton.addListener(new ClickListener() {
+        Image nameImage = new Image(name);
+        ImageButton Play_Button = new ImageButton(drawable_play);
+        ImageButton About_Button = new ImageButton(drawable_about);
+        ImageButton Exit_Button = new ImageButton(drawable_exit);
+
+
+        table.add(nameImage).size(1200, 400).colspan(3).center().pad(10);
+        table.row();
+        table.add(Play_Button).size(500, 300).pad(10);
+        table.add(About_Button).size(500, 300).pad(10);
+        table.add(Exit_Button).size(500, 300).pad(10);
+
+
+
+
+
+
+        Play_Button.addListener(new ClickListener() {
             @Override
             public void clicked (InputEvent event, float x, float y) {
                 game.setScreen(Main.gameScreen);
             }
         });
+        Exit_Button.addListener(new ClickListener() {
+            @Override
+            public void clicked (InputEvent event, float x, float y) {
+                Gdx.app.exit();
+            }
+        });
 
-        stage.addActor(playButton);
         Gdx.input.setInputProcessor(stage);
     }
 
