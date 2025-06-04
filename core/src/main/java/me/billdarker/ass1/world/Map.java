@@ -17,6 +17,7 @@ public class Map {
      */
     private final int width;
     private final int height;
+    private Player wild;
     private final Tile[][] tiles; // 2D array to store tiles
     private static final int TILE_SIZE = 32; // Size of each tile in pixels
 
@@ -24,7 +25,7 @@ public class Map {
         this.width = width;
         this.height = height;
         this.tiles = new Tile[width][height];
-        Player wild = new Player(this, playerType.WILD, "Wild"); // Create a neutral player for unowned tiles
+        wild = new Player(this, playerType.WILD, "Wild"); // Create a neutral player for unowned tiles
 
         for(int x = 0; x < getWidth(); x++) {
             for(int y = 0; y < getHeight(); y++) {
@@ -32,6 +33,10 @@ public class Map {
                 spawnTile(x, y, (x + y) % 2 == 0 ? 0 : 1, wild);
             }
         }
+    }
+
+    public void update(){
+        wild.update();
     }
 
     public void setOwner(int x, int y, Player owner) {
@@ -140,5 +145,9 @@ public class Map {
         int dx = Math.abs(tile1.getX() - tile2.getX());
         int dy = Math.abs(tile1.getY() - tile2.getY());
         return (dx == 1 && dy == 0) || (dx == 0 && dy == 1);
+    }
+
+    public void attack(Territory attacker){
+
     }
 }

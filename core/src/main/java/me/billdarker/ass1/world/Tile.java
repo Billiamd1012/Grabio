@@ -63,8 +63,11 @@ public class Tile {
     public void draw(ShapeRenderer shapeRenderer) {
         Color tileColor = getTileColor();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(tileColor);
+        shapeRenderer.setColor(0, 0, 0, 1);
         shapeRenderer.rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        shapeRenderer.setColor(tileColor);
+        shapeRenderer.rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE*((population/10)));
+
         shapeRenderer.end();
     }
 
