@@ -3,6 +3,7 @@ package me.billdarker.ass1;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -36,11 +37,21 @@ public class MenuScreen implements Screen {
     Texture name = new Texture("Grabio_lable.png");
     Texture exit = new Texture("Grabio_Exit.png");
     Texture about = new Texture("Grabio_About.png");
+    Texture mutemusic = new Texture("Grabio_Music_Mute.png");
+    Texture playmusic = new Texture("Grabio_Music_Play.png");
     TextureRegionDrawable drawable_play = new TextureRegionDrawable(new TextureRegion(play));
     TextureRegionDrawable drawable_exit = new TextureRegionDrawable(new TextureRegion(exit));
     TextureRegionDrawable drawable_about = new TextureRegionDrawable(new TextureRegion(about));
+    TextureRegionDrawable drawable_playmusic = new TextureRegionDrawable(new TextureRegion(playmusic));
+    TextureRegionDrawable drawable_mutemusic = new TextureRegionDrawable(new TextureRegion(mutemusic));
+    private boolean Music_Button_flipped = false;
+
+    Music background_music = Gdx.audio.newMusic(Gdx.files.internal("game-music-7408.mp3"));
 
     public MenuScreen(Main game) {
+        background_music.setLooping(true);
+        background_music.setVolume(0.5f);
+        background_music.play();
         this.game = game;
         font = new BitmapFont();
         font.setColor(Color.WHITE); // Set the color of the text
@@ -61,13 +72,15 @@ public class MenuScreen implements Screen {
         ImageButton Play_Button = new ImageButton(drawable_play);
         ImageButton About_Button = new ImageButton(drawable_about);
         ImageButton Exit_Button = new ImageButton(drawable_exit);
+        ImageButton Music_button = new ImageButton(drawable_playmusic);
 
 
-        table.add(nameImage).size(1200, 400).colspan(3).center().pad(10);
+        table.add(nameImage).size(1200, 400).colspan(4).center().pad(10);
         table.row();
-        table.add(Play_Button).size(500, 300).pad(10);
-        table.add(About_Button).size(500, 300).pad(10);
-        table.add(Exit_Button).size(500, 300).pad(10);
+        table.add(Play_Button).size(400, 200).pad(10);
+        table.add(About_Button).size(400, 200).pad(10);
+        table.add(Exit_Button).size(400, 200).pad(10);
+        table.add(Music_button).size(200).pad(10);
 
 
 
@@ -84,6 +97,21 @@ public class MenuScreen implements Screen {
             @Override
             public void clicked (InputEvent event, float x, float y) {
                 Gdx.app.exit();
+            }
+        });
+
+        Music_button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (!Music_Button_flipped) {
+                    Music_button.getStyle().imageUp = drawable_mutemusic;
+                    Music_Button_flipped = true;
+                    background_music.pause();
+                } else {
+                    Music_button.getStyle().imageUp = drawable_playmusic;
+                    Music_Button_flipped = false;
+                    background_music.play();
+                }
             }
         });
 
