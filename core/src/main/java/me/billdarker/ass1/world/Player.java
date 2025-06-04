@@ -8,12 +8,24 @@ public class Player {
     private playerType type;
     private final Territory territory;
     private final Map map;
+    private float growthMultiplier;
 
     public Player(Map _map, playerType _type, String _name) {
         map = _map;
         name = _name;
         type = _type;
         territory = new Territory(this, map);
+        switch (type){
+            case PLAYER:
+                growthMultiplier = 1f;
+                break;
+            case WILD:
+                growthMultiplier = 0.2f;
+                break;
+            case BOT:
+                growthMultiplier = 0.8f;
+                break;
+        }
     }
 
     public void setStart(int x, int y) {
@@ -59,5 +71,9 @@ public class Player {
 
     public float defend(Player attacker, float attackingTroops){
         return territory.defend(attacker, attackingTroops);
+    }
+
+    public float getGrowthMultiplier() {
+        return growthMultiplier;
     }
 }

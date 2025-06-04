@@ -12,7 +12,7 @@ public class Territory {
     private final Player owner;
     private final List<Tile> tiles;
     private float population;
-    private float attackPercentage = 0.2f;
+    private float attackPercentage = 0.5f;
     private float maxPopulation;
     private final float maxPopulationMultiplier = 10f;
     private final Map map;
@@ -59,7 +59,7 @@ public class Territory {
         // Update each tile independently
         for (Tile tile : tiles) {
             // Calculate tile's growth based on its own growth rate and current population
-            float tileGrowthRate = tile.getGrowthRate() * BASE_GROWTH_RATE;
+            float tileGrowthRate = tile.getGrowthRate() * BASE_GROWTH_RATE * owner.getGrowthMultiplier();
             float tilePopulationRatio = tile.getPopulation() / (maxPopulation / tiles.size());
 
             // Calculate logistic growth factor for the tile
@@ -96,10 +96,16 @@ public class Territory {
             " maxPopulation: " + maxPopulation +
             " territoryRatio: " + territoryPopulationRatio);
 
+        // Update attacks and remove completed ones
         if (!attacks.isEmpty()) {
+            List<Attack> completedAttacks = new ArrayList<>();
             for (Attack attack : attacks) {
                 attack.update();
+                if (attack.isComplete()) {
+                    completedAttacks.add(attack);
+                }
             }
+            attacks.removeAll(completedAttacks);
         }
     }
 
@@ -145,53 +151,60 @@ public class Territory {
     public Player getOwner() {
         return owner;
     }
-    //This method is called by the player when they click on a tile
-    public void attack(Tile tile){
-        //TODO: Ask map if the tile at x,y is owned by a territory that is adjacent to this territory
-        if (map.isAdjacent(owner, tile)){
-            Gdx.app.log("Territory", "Territory is adjacent to this one");
-            //TODO: if can attack territory then attack with current settings
-            float attackingTroops = getPopulation()*attackPercentage;
-            Attack newAttack = new Attack(owner, tile.owner,attackingTroops);
-            population -= attackingTroops;
 
+    public void attack(Tile tile) {
+        if (map.isAdjacent(owner, tile)) {
+            Gdx.app.log("Territory", "Territory is adjacent to this one");
+            float attackingTroops = population * attackPercentage;
+
+            // Distribute attacking troops proportionally to tile populations
+            for (Tile attackingTile : tiles) {
+                float tileTroops = (attackingTile.getPopulation() / population) * attackingTroops;
+                attackingTile.removePopulation(tileTroops);
+            }
+
+            Attack newAttack = new Attack(this.owner, tile.owner, attackingTroops);
+            population -= attackingTroops;
             attacks.add(newAttack);
         }
-
     }
 
-    //This method is called by by an attacking territory
-    public float defend(Player attacker, float attackingTroops){
-        // TODO: Implement defense logic
-        //attackingTiles = map.all adjacent tiles
+    public float defend(Player attacker, float attackingTroops) {
         List<Tile> defendingTiles = new ArrayList<>();
-        for (Tile tile : tiles){
-            if (map.isBordering(attacker, tile)){
+        for (Tile tile : tiles) {
+            if (map.isBordering(attacker, tile)) {
                 defendingTiles.add(tile);
             }
         }
 
-        // attacking per tile = attackingTroops / num(attackingTiles)
-        //new attacking troops = attackingTroops - (defenders on a tile*defense bonus of tile)
+        if (defendingTiles.isEmpty()) {
+            return attackingTroops;
+        }
 
+        // attacking per tile = attackingTroops / num(defendingTiles)
+        float attackingPerTile = attackingTroops / defendingTiles.size();
+        float leftOverTroops = 0;
 
-        // if newAttackingTroops > 0
-        // attackingTiles change owner to attacker
-        // attacking tiles are filled with attacking troops
-        // excesss troops keep attacking
+        for (Tile tile : defendingTiles) {
+            float defenseStrength = tile.getPopulation() * tile.getDefenseRate();
+            float leftOverTroopsOnTile = attackingPerTile - defenseStrength;
 
+            if (leftOverTroopsOnTile > 0) {
+                // Tile is captured
+                Gdx.app.log("Defending", "Captured tile at " + tile.getX() + "," + tile.getY());
+                // Transfer ownership and set population to attacking troops
+                tile.setOwner(attacker);
+                tile.setPopulation(leftOverTroopsOnTile);
+            } else {
+                // Tile successfully defended
+                float casualties = attackingPerTile / tile.getDefenseRate();
+                tile.removePopulation(casualties);
+            }
 
+            leftOverTroops += Math.max(0, leftOverTroopsOnTile);
+        }
 
-        //Territory ask if can attack /
-        //territory calls attack /
-        // Attack object? that has a troop count and a target /
-        // Belongs to territory /
-        // On territory update call defend on attack object /
-        // Attack object calls defend on territory /
-        // Defend takes away a certain number of troops /
-        // If not 0 then take some territory from defender
-        // If 0 after defend destroy attack object
-
-        return attackingTroops;
+        Gdx.app.log("Defending", "Troops left after defending: " + leftOverTroops + " Attakcing troops: "+attackingTroops);
+        return leftOverTroops;
     }
 }

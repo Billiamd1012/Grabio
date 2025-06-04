@@ -7,6 +7,8 @@ public class Attack {
     private final Player attacker;
     private final Player defender;
     private float attackingTroops;
+    private boolean isComplete = false;
+
     public Attack(Player _attacker, Player _defender, float _attackingTroops){
         attacker = _attacker;
         defender = _defender;
@@ -18,5 +20,19 @@ public class Attack {
     public void update(){
         //each update call defend on defender which takes away some troops
         attackingTroops = defender.defend(attacker, attackingTroops);
+        
+        // Check if attack is complete
+        if (attackingTroops <= 0) {
+            isComplete = true;
+            Gdx.app.log("Attack", "Attack completed - no troops remaining");
+        }
+    }
+
+    public boolean isComplete() {
+        return isComplete;
+    }
+
+    public float getAttackingTroops() {
+        return attackingTroops;
     }
 }

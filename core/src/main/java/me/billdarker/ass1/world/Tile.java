@@ -125,4 +125,8 @@ public class Tile {
     public void removePopulation(float amount) {
         this.population = Math.max(MIN_POPULATION, this.population - amount);
     }
+
+    public float getDefenseRate(){
+        return defenseRate;
+    }
 }
