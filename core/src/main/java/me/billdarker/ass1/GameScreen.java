@@ -28,6 +28,7 @@ public class GameScreen implements Screen {
     private Stage stage;
     private Map map;
     private Player player;
+    private Player wild;
 
     private float viewportWidth = 100f;
     private float viewportHeight = 100f;
@@ -44,7 +45,6 @@ public class GameScreen implements Screen {
         stage = new Stage();
         map = new Map(20, 20); // Create a 20x20 tile map
         player = new Player(map, playerType.PLAYER, "Player"); // Create a neutral player for unowned tiles
-
 
         float width = Gdx.graphics.getWidth();
         float height = Gdx.graphics.getHeight();
@@ -110,6 +110,7 @@ public class GameScreen implements Screen {
 //    gamestate update runs 10 times per second
     public void update(){
         player.update();
+        map.update();
     }
 
 }
