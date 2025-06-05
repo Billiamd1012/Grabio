@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +17,7 @@ public class Map {
      * Tiles can be set individually using coordinates, and the entire map can be rendered
      * using a SpriteBatch.
      */
+
     private final int width;
     private final int height;
     private final Tile[][] tiles; // 2D array to store tiles
@@ -94,5 +97,5 @@ public class Map {
 
         return playerTiles;
     }
-    
+
 }
