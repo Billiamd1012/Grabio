@@ -163,7 +163,7 @@ public class Territory {
                 attackingTile.removePopulation(tileTroops);
             }
 
-            Attack newAttack = new Attack(this.owner, tile.owner, attackingTroops);
+            Attack newAttack = new Attack(this.owner, tile.owner, attackingTroops, tile, map);
             population -= attackingTroops;
             attacks.add(newAttack);
         }
@@ -195,6 +195,8 @@ public class Territory {
                 // Transfer ownership and set population to attacking troops
                 tile.setOwner(attacker);
                 tile.setPopulation(leftOverTroopsOnTile);
+                attacker.addTile(tile);
+                removeTile(tile);
             } else {
                 // Tile successfully defended
                 float casualties = attackingPerTile / tile.getDefenseRate();
@@ -204,7 +206,7 @@ public class Territory {
             leftOverTroops += Math.max(0, leftOverTroopsOnTile);
         }
 
-        Gdx.app.log("Defending", "Troops left after defending: " + leftOverTroops + " Attakcing troops: "+attackingTroops);
+        Gdx.app.log("Defending", "Troops left after defending: " + leftOverTroops + " Attacking troops: " + attackingTroops);
         return leftOverTroops;
     }
 }
