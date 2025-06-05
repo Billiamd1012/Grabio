@@ -40,7 +40,7 @@ public class AboutScreen implements Screen {
         ImageButton Back_Button = new ImageButton(drawable_back);
         table.row();
 
-        table.add(Back_Button).size(500, 300).pad(10);
+        table.add(Back_Button).size(400, 200).pad(10);
 
 
         Back_Button.addListener(new ClickListener() {

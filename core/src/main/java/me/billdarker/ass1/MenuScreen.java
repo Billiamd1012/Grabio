@@ -99,6 +99,12 @@ public class MenuScreen implements Screen {
                 Gdx.app.exit();
             }
         });
+        About_Button.addListener(new ClickListener() {
+            @Override
+            public void clicked (InputEvent event, float x, float y) {
+                game.setScreen(Main.aboutScreen);
+            }
+        });
 
         Music_button.addListener(new ClickListener() {
             @Override
