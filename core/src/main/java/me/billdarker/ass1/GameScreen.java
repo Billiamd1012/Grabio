@@ -54,7 +54,15 @@ public class GameScreen implements Screen {
     TextureRegionDrawable drawable_add = new TextureRegionDrawable(new TextureRegion(add));
     TextureRegionDrawable drawable_minus= new TextureRegionDrawable(new TextureRegion(minus));
     Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+    BitmapFont font = new BitmapFont(Gdx.files.internal("arial_high_quality.fnt"));
+    Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.valueOf("44D49B"));
 
+    BitmapFont font2 = new BitmapFont(Gdx.files.internal("arial_high_quality_Smaller.fnt"));
+    Label.LabelStyle labelStyle2 = new Label.LabelStyle(font, Color.valueOf("44D49B"));
+
+    Label percentageTitleLabel = new Label("Troop Attack: % 0" , labelStyle2);
+    Label TroopCountTitleLabel = new Label("Troop Count: 0", labelStyle2);
+    Label GrowthRateTitleLabel = new Label("Growth Rate: 0", labelStyle2);
 
 
 
@@ -90,16 +98,10 @@ public class GameScreen implements Screen {
         ImageButton Add_Button = new ImageButton(drawable_add);
         ImageButton Minus_button = new ImageButton(drawable_minus);
 
-        BitmapFont font = new BitmapFont(Gdx.files.internal("arial_high_quality.fnt"));
-        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.valueOf("44D49B"));
-
-        BitmapFont font2 = new BitmapFont(Gdx.files.internal("arial_high_quality_Smaller.fnt"));
-        Label.LabelStyle labelStyle2 = new Label.LabelStyle(font, Color.valueOf("44D49B"));
 
 
-        Label percentageTitleLabel = new Label("Troop Attack: %0", labelStyle2);
-        Label TroopCountTitleLabel = new Label("Troop Count: 1000", labelStyle2);
-        Label GrowthRateTitleLabel = new Label("Growth Rate: 1", labelStyle2);
+
+
         percentageTitleLabel.setWrap(false);
 
         overlay.right();
@@ -119,13 +121,13 @@ public class GameScreen implements Screen {
         Add_Button.addListener(new ClickListener() {
             @Override
             public void clicked (InputEvent event, float x, float y) {
-                percentageTitleLabel.setText("Troop Attack: %" + );
+
             }
         });
         Minus_button.addListener(new ClickListener() {
             @Override
             public void clicked (InputEvent event, float x, float y) {
-                percentageTitleLabel.setText("Troop Attack: %" + );
+
             }
         });
     }
@@ -180,6 +182,9 @@ public class GameScreen implements Screen {
 //    gamestate update runs 10 times per second
     public void update(){
         player.update();
+        percentageTitleLabel.setText("Troop Attack: %" + number);
+        TroopCountTitleLabel.setText("Troop Count: "+ number);
+        GrowthRateTitleLabel.setText("Growth Rate: " + number);
     }
 
 }
