@@ -1,10 +1,8 @@
 package me.billdarker.ass1.overlay;
 
 
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Camera {
@@ -19,7 +17,6 @@ public class Camera {
     private float nextX;
     private float nextY;
 
-    private Texture texture;
 
     public Camera() {
         float width = Gdx.graphics.getWidth();

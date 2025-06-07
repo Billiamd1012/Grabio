@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import me.billdarker.ass1.overlay.Camera;
 import me.billdarker.ass1.overlay.InputDetector;
 import me.billdarker.ass1.overlay.TouchHandler;
+import me.billdarker.ass1.world.BotManager;
 import me.billdarker.ass1.world.Map;
 import me.billdarker.ass1.world.Player;
 import me.billdarker.ass1.world.playerType;
@@ -28,12 +29,12 @@ public class GameScreen implements Screen {
     private Stage stage;
     private Map map;
     private Player player;
-    private Player wild;
+    private BotManager botManager;
 
-    private float viewportWidth = 100f;
-    private float viewportHeight = 100f;
     private Camera camera;
     private float lastUpdateTime = 0f;
+    //how often game updates 0.5f = twice a second
+    private final float updateSpeed = 0.2f;
 
     public GameScreen(Main game) {
         this.game = game;
@@ -45,9 +46,7 @@ public class GameScreen implements Screen {
         stage = new Stage();
         map = new Map(20, 20); // Create a 20x20 tile map
         player = new Player(map, playerType.PLAYER, "Player"); // Create a neutral player for unowned tiles
-
-        float width = Gdx.graphics.getWidth();
-        float height = Gdx.graphics.getHeight();
+        botManager = new BotManager(5,map);
         camera = new Camera();
 
         GestureDetector.GestureListener touchHandler = new TouchHandler(camera, map, player);
@@ -67,7 +66,7 @@ public class GameScreen implements Screen {
 
         // Update game state every 100ms (10 times per second)
         lastUpdateTime += delta;
-        if (lastUpdateTime >= 0.1f) {
+        if (lastUpdateTime >= updateSpeed) {
             update();
             lastUpdateTime = 0f;
         }
@@ -111,6 +110,7 @@ public class GameScreen implements Screen {
     public void update(){
         player.update();
         map.update();
+        botManager.update();
     }
 
 }

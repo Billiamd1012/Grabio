@@ -1,13 +1,12 @@
 package me.billdarker.ass1.world;
 
-import com.badlogic.gdx.Gdx;
 import java.util.List;
 
 public class Player {
     private String name;
     private playerType type;
     private final Territory territory;
-    private final Map map;
+    protected final Map map;
     private float growthMultiplier;
 
     public Player(Map _map, playerType _type, String _name) {

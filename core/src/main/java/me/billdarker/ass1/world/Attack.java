@@ -51,7 +51,6 @@ public class Attack {
 
     private List<Tile> getAdjacentTilesOfSameOwner() {
         List<Tile> adjacentTiles = new ArrayList<>();
-        List<Tile> attackerTiles = attacker.getTiles();
         
         for (Tile tile : defender.getTiles()) {
             if (tile != currentTarget && map.isBordering(attacker, tile)) {

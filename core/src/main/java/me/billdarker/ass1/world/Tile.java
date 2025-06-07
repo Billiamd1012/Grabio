@@ -76,7 +76,7 @@ public class Tile {
             //TODO: get colour from player
             return Color.RED;
         } else if (owner.getType() == playerType.BOT) {
-            return Color.GRAY;
+            return Color.CORAL;
         }
         else {
             switch (terrain) {
