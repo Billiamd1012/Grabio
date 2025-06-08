@@ -7,13 +7,16 @@ import com.badlogic.gdx.Game;
 public class Main extends Game {
     public static GameScreen gameScreen;
     public static MenuScreen menuScreen;
+    public static AboutScreen aboutScreen;
+    public static GameOverScreen gameOverScreen;
 
     @Override
     public void create() {
         menuScreen = new MenuScreen(this);
         gameScreen = new GameScreen(this);
-
-        setScreen(gameScreen);
+        aboutScreen = new AboutScreen(this);
+        gameOverScreen = new GameOverScreen(this);
+        setScreen(menuScreen);
     }
 
     public void setToGameScreen(){
