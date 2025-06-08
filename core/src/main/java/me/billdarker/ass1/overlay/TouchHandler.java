@@ -28,10 +28,15 @@ public class TouchHandler implements GestureDetector.GestureListener {
         int[] tileCoords = map.screenToTileCoordinates(x, y, camera.camera);
         int tileX = tileCoords[0];
         int tileY = tileCoords[1];
-        map.tapTile(player, tileX, tileY);
-        // Log the tapped tile coordinates
-        Gdx.app.log("TouchHandler", "Tapped tile at: " + tileX + ", " + tileY);
-        // You can also change the tile color to show it was tapped
+        
+        // Check if the coordinates are within the map bounds
+        if (tileX >= 0 && tileX < map.getWidth() && tileY >= 0 && tileY < map.getHeight()) {
+            map.tapTile(player, tileX, tileY);
+            // Log the tapped tile coordinates
+            Gdx.app.log("TouchHandler", "Tapped tile at: " + tileX + ", " + tileY);
+        } else {
+            Gdx.app.log("TouchHandler", "Tapped outside map bounds at: " + tileX + ", " + tileY);
+        }
 
         return true;
     }

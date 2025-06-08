@@ -1,19 +1,30 @@
 package me.billdarker.ass1.world;
 
-import com.badlogic.gdx.Gdx;
 import java.util.List;
 
 public class Player {
     private String name;
     private playerType type;
     private final Territory territory;
-    private final Map map;
+    protected final Map map;
+    private float growthMultiplier;
 
     public Player(Map _map, playerType _type, String _name) {
         map = _map;
         name = _name;
         type = _type;
         territory = new Territory(this, map);
+        switch (type){
+            case PLAYER:
+                growthMultiplier = 1f;
+                break;
+            case WILD:
+                growthMultiplier = 0.2f;
+                break;
+            case BOT:
+                growthMultiplier = 0.8f;
+                break;
+        }
     }
 
     public void setStart(int x, int y) {
@@ -57,7 +68,15 @@ public class Player {
         territory.attack(tile);
     }
 
-    public float defend(float attackingTroops){
-        return territory.defend(attackingTroops);
+    public float defend(Player attacker, float attackingTroops){
+        return territory.defend(attacker, attackingTroops);
+    }
+
+    public float getGrowthMultiplier() {
+        return growthMultiplier;
+    }
+
+    public Territory getTerritory() {
+        return territory;
     }
 }

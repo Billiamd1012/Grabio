@@ -4,8 +4,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,9 +15,9 @@ public class Map {
      * Tiles can be set individually using coordinates, and the entire map can be rendered
      * using a SpriteBatch.
      */
-
     private final int width;
     private final int height;
+    private Player wild;
     private final Tile[][] tiles; // 2D array to store tiles
     private static final int TILE_SIZE = 32; // Size of each tile in pixels
 
@@ -27,7 +25,7 @@ public class Map {
         this.width = width;
         this.height = height;
         this.tiles = new Tile[width][height];
-        Player wild = new Player(this, playerType.WILD, "Wild"); // Create a neutral player for unowned tiles
+        wild = new Player(this, playerType.WILD, "Wild"); // Create a neutral player for unowned tiles
 
         for(int x = 0; x < getWidth(); x++) {
             for(int y = 0; y < getHeight(); y++) {
@@ -37,19 +35,37 @@ public class Map {
         }
     }
 
+    public void update(){
+        wild.update();
+    }
+
     public void setOwner(int x, int y, Player owner) {
-        if (x >= 0 && x < width && y >= 0 && y < height) {
+        if (x >= 0 && x < width && y >= 0 && y < height && tiles[x][y] != null) {
+            Player oldOwner = tiles[x][y].owner;
+            if (oldOwner != null) {
+                oldOwner.removeTile(tiles[x][y]);
+            }
             tiles[x][y].setOwner(owner);
+            owner.addTile(tiles[x][y]);
         }
+    }
+    public void tapTile(Player _player, int x, int y){
+        Tile tile = getTile(x, y);
+        _player.attack(tile);
+    }
+    public Tile getTile(int x, int y) {
+        if (x >= 0 && x < width && y >= 0 && y < height) {
+            return tiles[x][y];
+        }
+        return null;
     }
 
     public void spawnTile(int x, int y, int tileType, Player owner) {
         if (x >= 0 && x < width && y >= 0 && y < height) {
             tiles[x][y] = new Tile(owner, tileType, x, y);
+            owner.addTile(tiles[x][y]);
         }
     }
-
-
 
     public void draw(SpriteBatch batch) {
         ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -98,4 +114,40 @@ public class Map {
         return playerTiles;
     }
 
+    public boolean isAdjacent(Player attacking, Tile tile) {
+        List<Tile> attackingTiles = attacking.getTiles();
+
+        Player defender = tile.owner;
+
+        List<Tile> defendingTiles = defender.getTiles();
+
+        for (Tile attackTile : attackingTiles) {
+            for (Tile defendTile : defendingTiles) {
+                if (areTilesAdjacent(attackTile, defendTile)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isBordering(Player attacking, Tile tile){
+        List<Tile> attackingTiles = attacking.getTiles();
+        for (Tile attackTile : attackingTiles) {
+            if (areTilesAdjacent(attackTile, tile)){
+                return  true;
+            }
+        }
+        return false;
+    }
+
+    private boolean areTilesAdjacent(Tile tile1, Tile tile2) {
+        int dx = Math.abs(tile1.getX() - tile2.getX());
+        int dy = Math.abs(tile1.getY() - tile2.getY());
+        return (dx == 1 && dy == 0) || (dx == 0 && dy == 1);
+    }
+
+    public void attack(Territory attacker){
+
+    }
 }

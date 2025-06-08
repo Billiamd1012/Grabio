@@ -63,9 +63,9 @@ public class Tile {
     public void draw(ShapeRenderer shapeRenderer) {
         Color tileColor = getTileColor();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(tileColor);
-        shapeRenderer.rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
         shapeRenderer.setColor(0, 0, 0, 1);
+        shapeRenderer.rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        shapeRenderer.setColor(tileColor);
         shapeRenderer.rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE*((population/10)));
 
         shapeRenderer.end();
@@ -76,7 +76,7 @@ public class Tile {
             //TODO: get colour from player
             return Color.RED;
         } else if (owner.getType() == playerType.BOT) {
-            return Color.GRAY;
+            return Color.CORAL;
         }
         else {
             switch (terrain) {
@@ -124,5 +124,9 @@ public class Tile {
 
     public void removePopulation(float amount) {
         this.population = Math.max(MIN_POPULATION, this.population - amount);
+    }
+
+    public float getDefenseRate(){
+        return defenseRate;
     }
 }
