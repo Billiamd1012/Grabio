@@ -7,19 +7,39 @@ import com.badlogic.gdx.Game;
 public class Main extends Game {
     public static GameScreen gameScreen;
     public static MenuScreen menuScreen;
+<<<<<<< HEAD
     public static AboutScreen aboutScreen;
     public static GameOverScreen gameOverScreen;
+=======
+    public static DeathScreen deathScreen;
+    public static VictoryScreen victoryScreen;
+>>>>>>> attacking
 
     @Override
     public void create() {
         menuScreen = new MenuScreen(this);
         gameScreen = new GameScreen(this);
+<<<<<<< HEAD
         aboutScreen = new AboutScreen(this);
         gameOverScreen = new GameOverScreen(this);
         setScreen(menuScreen);
+=======
+        deathScreen = new DeathScreen(this);
+        victoryScreen = new VictoryScreen(this);
+
+        setScreen(victoryScreen);
+>>>>>>> attacking
     }
 
     public void setToGameScreen(){
         setScreen(gameScreen);
+    }
+
+    public void setToDeathScreen() {
+        setScreen(deathScreen);
+    }
+
+    public void setToVictoryScreen() {
+        setScreen(victoryScreen);
     }
 }
