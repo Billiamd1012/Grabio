@@ -12,7 +12,7 @@ public class Territory {
     private final Player owner;
     private final List<Tile> tiles;
     private float population;
-    private float attackPercentage = 0.5f;
+    private float attackPercentage = 0.5f; // Default value, will be updated by overlay
     private float maxPopulation;
     private final float maxPopulationMultiplier = 10f;
     private final Map map;
@@ -92,9 +92,9 @@ public class Territory {
             population = maxPopulation;
         }
 
-        Gdx.app.log("Territory", "Current population: " + population +
-            " maxPopulation: " + maxPopulation +
-            " territoryRatio: " + territoryPopulationRatio);
+//        Gdx.app.log("Territory", "Current population: " + population +
+//            " maxPopulation: " + maxPopulation +
+//            " territoryRatio: " + territoryPopulationRatio);
 
         // Update attacks and remove completed ones
         if (!attacks.isEmpty()) {
@@ -153,19 +153,35 @@ public class Territory {
     }
 
     public void attack(Tile tile) {
-        if (map.isAdjacent(owner, tile)) {
-            Gdx.app.log("Territory", "Territory is adjacent to this one");
-            float attackingTroops = population * attackPercentage;
+        if (tile == null || tile.owner == this.owner) {
+            Gdx.app.log("Territory", "Cannot attack own territory or null tile");
+            return;
+        }
 
+        if (!map.isAdjacent(owner, tile)) {
+            Gdx.app.log("Territory", "Target tile is not adjacent to territory");
+            return;
+        }
+
+        float attackingTroops = population * attackPercentage;
+        if (attackingTroops < MIN_POPULATION) {
+            Gdx.app.log("Territory", "Not enough troops to attack: " + attackingTroops);
+            return;
+        }
+
+        // Create attack first to ensure it's valid
+        Attack newAttack = new Attack(this.owner, tile.owner, attackingTroops, tile, map);
+        
+        // Only reduce population if attack was created successfully
+        if (newAttack != null) {
             // Distribute attacking troops proportionally to tile populations
             for (Tile attackingTile : tiles) {
                 float tileTroops = (attackingTile.getPopulation() / population) * attackingTroops;
                 attackingTile.removePopulation(tileTroops);
             }
-
-            Attack newAttack = new Attack(this.owner, tile.owner, attackingTroops, tile, map);
             population -= attackingTroops;
             attacks.add(newAttack);
+            Gdx.app.log("Territory", "Attack initiated with " + attackingTroops + " troops");
         }
     }
 
@@ -208,5 +224,9 @@ public class Territory {
 
         Gdx.app.log("Defending", "Troops left after defending: " + leftOverTroops + " Attacking troops: " + attackingTroops);
         return leftOverTroops;
+    }
+
+    public void setAttackPercentage(float percentage) {
+        this.attackPercentage = percentage;
     }
 }

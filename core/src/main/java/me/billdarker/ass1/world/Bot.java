@@ -3,6 +3,7 @@ package me.billdarker.ass1.world;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.List;
+import com.badlogic.gdx.Gdx;
 
 public class Bot extends Player {
     //this bot has a simple function of clicking one of it's neighbours at random whenever it's population is full
@@ -17,12 +18,15 @@ public class Bot extends Player {
     @Override
     public void update() {
         super.update();
-        if (getPopulation() == getMaxPopulation()){
+        // Use a threshold of 95% of max population instead of exact equality
+        if (getPopulation() >= getMaxPopulation() * 0.95f) {
             //attack a neighbour
             getAdjacent();
             if (!adjacent.isEmpty()) {
                 Tile defendingTile = adjacent.get(random.nextInt(adjacent.size()));
                 attack(defendingTile);
+                Gdx.app.log("Bot", "Attacking tile at " + defendingTile.getX() + "," + defendingTile.getY() + 
+                    " with population " + getPopulation() + "/" + getMaxPopulation());
             }
         }
     }

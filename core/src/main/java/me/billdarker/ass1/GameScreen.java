@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import me.billdarker.ass1.overlay.Camera;
 import me.billdarker.ass1.overlay.InputDetector;
 import me.billdarker.ass1.overlay.TouchHandler;
+import me.billdarker.ass1.overlay.Overlay;
 import me.billdarker.ass1.world.BotManager;
 import me.billdarker.ass1.world.Map;
 import me.billdarker.ass1.world.Player;
@@ -36,6 +37,8 @@ public class GameScreen implements Screen {
     //how often game updates 0.5f = twice a second
     private final float updateSpeed = 0.2f;
 
+    private Overlay overlay;
+
     public GameScreen(Main game) {
         this.game = game;
     }
@@ -47,7 +50,8 @@ public class GameScreen implements Screen {
         map = new Map(20, 20); // Create a 20x20 tile map
         player = new Player(map, playerType.PLAYER, "Player"); // Create a neutral player for unowned tiles
         botManager = new BotManager(5,map);
-        camera = new Camera();
+        camera = new Camera(map.getWidth(), map.getHeight());
+        overlay = new Overlay(stage);
 
         GestureDetector.GestureListener touchHandler = new TouchHandler(camera, map, player);
         GestureDetector InputDetector = new InputDetector(touchHandler);
@@ -72,12 +76,16 @@ public class GameScreen implements Screen {
         }
 
         // Update camera position if needed
-        camera.update(delta,batch);
+        camera.update(delta, batch);
 
+        // Draw game elements
         batch.begin();
         map.draw(batch);
-        stage.draw();
         batch.end();
+        
+        // Draw UI on top
+        stage.act(delta);
+        stage.draw();
     }
 
     @Override
@@ -104,6 +112,7 @@ public class GameScreen implements Screen {
     public void dispose() {
         batch.dispose();
         stage.dispose();
+        overlay.dispose();
     }
 
 //    gamestate update runs 10 times per second
@@ -111,6 +120,13 @@ public class GameScreen implements Screen {
         player.update();
         map.update();
         botManager.update();
+        
+        // Update overlay with player statistics
+        overlay.updatePopulation(player.getPopulation(), player.getMaxPopulation());
+        overlay.updateGrowthRate(player.getGrowthMultiplier() * 100);
+        
+        // Update territory attack percentage from overlay
+        player.getTerritory().setAttackPercentage(overlay.getAttackPercentage());
     }
 
 }

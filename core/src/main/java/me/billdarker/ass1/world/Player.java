@@ -75,4 +75,8 @@ public class Player {
     public float getGrowthMultiplier() {
         return growthMultiplier;
     }
+
+    public Territory getTerritory() {
+        return territory;
+    }
 }
