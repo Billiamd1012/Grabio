@@ -9,6 +9,8 @@ public class Main extends Game {
     public static MenuScreen menuScreen;
     public static AboutScreen aboutScreen;
     public static GameOverScreen gameOverScreen;
+    public static DeathScreen deathScreen;
+    public static VictoryScreen victoryScreen;
 
     @Override
     public void create() {
@@ -16,6 +18,8 @@ public class Main extends Game {
         gameScreen = new GameScreen(this);
         aboutScreen = new AboutScreen(this);
         gameOverScreen = new GameOverScreen(this);
+        deathScreen = new DeathScreen(this);
+        victoryScreen = new VictoryScreen(this);
         setScreen(menuScreen);
     }
 

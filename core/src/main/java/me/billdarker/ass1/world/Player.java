@@ -24,6 +24,9 @@ public class Player {
             case BOT:
                 growthMultiplier = 0.8f;
                 break;
+            case WATER:
+                growthMultiplier = 0;
+                break;
         }
     }
 

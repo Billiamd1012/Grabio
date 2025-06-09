@@ -24,13 +24,13 @@ public class Attack {
     }
 
     public void update() {
-        if (isComplete || currentTarget == null) {
+        if (isComplete || currentTarget == null || currentTarget.owner.getType() == playerType.WATER) {
             return;
         }
 
         // Defend against current target
         float remainingTroops = defender.defend(attacker, attackingTroops);
-        
+
         // If we have remaining troops, try to attack adjacent tiles of the same owner
         if (remainingTroops > 0) {
             List<Tile> adjacentTiles = getAdjacentTilesOfSameOwner();
@@ -51,13 +51,13 @@ public class Attack {
 
     private List<Tile> getAdjacentTilesOfSameOwner() {
         List<Tile> adjacentTiles = new ArrayList<>();
-        
+
         for (Tile tile : defender.getTiles()) {
             if (tile != currentTarget && map.isBordering(attacker, tile)) {
                 adjacentTiles.add(tile);
             }
         }
-        
+
         return adjacentTiles;
     }
 
