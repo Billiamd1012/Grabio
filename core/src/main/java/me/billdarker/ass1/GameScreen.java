@@ -14,6 +14,7 @@ import me.billdarker.ass1.overlay.Overlay;
 import me.billdarker.ass1.world.BotManager;
 import me.billdarker.ass1.world.Map;
 import me.billdarker.ass1.world.Player;
+import me.billdarker.ass1.world.WaterSpawn;
 import me.billdarker.ass1.world.playerType;
 
 public class GameScreen implements Screen {
@@ -31,7 +32,7 @@ public class GameScreen implements Screen {
     private Map map;
     private Player player;
     private BotManager botManager;
-
+    private WaterSpawn waterSpawn;
     private Camera camera;
     private float lastUpdateTime = 0f;
     //how often game updates 0.5f = twice a second
@@ -50,6 +51,7 @@ public class GameScreen implements Screen {
         map = new Map(20, 20); // Create a 20x20 tile map
         player = new Player(map, playerType.PLAYER, "Player"); // Create a neutral player for unowned tiles
         botManager = new BotManager(5,map);
+        waterSpawn = new WaterSpawn(5, map);
         camera = new Camera(map.getWidth(), map.getHeight());
         overlay = new Overlay(stage);
 
@@ -82,7 +84,7 @@ public class GameScreen implements Screen {
         batch.begin();
         map.draw(batch);
         batch.end();
-        
+
         // Draw UI on top
         stage.act(delta);
         stage.draw();
@@ -120,11 +122,11 @@ public class GameScreen implements Screen {
         player.update();
         map.update();
         botManager.update();
-        
+
         // Update overlay with player statistics
         overlay.updatePopulation(player.getPopulation(), player.getMaxPopulation());
         overlay.updateGrowthRate(player.getGrowthMultiplier() * 100);
-        
+
         // Update territory attack percentage from overlay
         player.getTerritory().setAttackPercentage(overlay.getAttackPercentage());
     }

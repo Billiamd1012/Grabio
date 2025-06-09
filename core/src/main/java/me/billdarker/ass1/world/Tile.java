@@ -77,7 +77,10 @@ public class Tile {
             return Color.RED;
         } else if (owner.getType() == playerType.BOT) {
             return Color.CORAL;
+        } else if (owner.getType() == playerType.WATER){
+            return Color.BLUE;
         }
+
         else {
             switch (terrain) {
                 case GRASS:
