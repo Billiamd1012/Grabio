@@ -17,10 +17,12 @@ public class Territory {
     private final float maxPopulationMultiplier = 10f;
     private final Map map;
     private static final float MIN_POPULATION = 1f;
-    private static final float BASE_GROWTH_RATE = 0.1f;
+    private static final float BASE_GROWTH_RATE = 0.02f;
     private static final float TERRITORY_INFLUENCE = 0.3f; // How much territory population influences tile growth
 
     private List<Attack> attacks = new ArrayList<>();
+    private float currentGrowthRate = 0f; // Track current growth rate
+    private float troopsAddedThisUpdate = 0f; // Track actual troops added
 
     public Territory(Player owner, Map map) {
         this.owner = owner;
@@ -50,11 +52,17 @@ public class Territory {
     public void update() {
         if (tiles.isEmpty()) {
             population = MIN_POPULATION;
+            currentGrowthRate = 0f;
+            troopsAddedThisUpdate = 0f;
             return;
         }
 
         // Calculate territory's current population ratio (0 to 1)
         float territoryPopulationRatio = population / maxPopulation;
+
+        // Calculate average growth rate for this update
+        float totalGrowth = 0f;
+        float previousPopulation = population;
 
         // Update each tile independently
         for (Tile tile : tiles) {
@@ -73,12 +81,22 @@ public class Territory {
 
             // Apply growth to tile
             tile.addPopulation(tileGrowth);
+            totalGrowth += tileGrowth;
         }
 
         // Update territory's total population
         population = 0;
         for (Tile tile : tiles) {
             population += tile.getPopulation();
+        }
+
+        // Calculate current growth rate as percentage and actual troops added
+        if (previousPopulation > 0) {
+            currentGrowthRate = ((population - previousPopulation) / previousPopulation) * 100f;
+            troopsAddedThisUpdate = population - previousPopulation;
+        } else {
+            currentGrowthRate = 0f;
+            troopsAddedThisUpdate = 0f;
         }
 
         // Ensure territory population stays within bounds
@@ -90,11 +108,9 @@ public class Territory {
                 tile.removePopulation(reduction);
             }
             population = maxPopulation;
+            // Adjust troops added to account for the cap
+            troopsAddedThisUpdate -= excess;
         }
-
-//        Gdx.app.log("Territory", "Current population: " + population +
-//            " maxPopulation: " + maxPopulation +
-//            " territoryRatio: " + territoryPopulationRatio);
 
         // Update attacks and remove completed ones
         if (!attacks.isEmpty()) {
@@ -228,5 +244,13 @@ public class Territory {
 
     public void setAttackPercentage(float percentage) {
         this.attackPercentage = percentage;
+    }
+
+    public float getCurrentGrowthRate() {
+        return currentGrowthRate;
+    }
+
+    public float getTroopsAddedThisUpdate() {
+        return troopsAddedThisUpdate;
     }
 }

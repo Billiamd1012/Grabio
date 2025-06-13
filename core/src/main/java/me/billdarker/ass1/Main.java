@@ -20,7 +20,7 @@ public class Main extends Game {
         gameOverScreen = new GameOverScreen(this);
         deathScreen = new DeathScreen(this);
         victoryScreen = new VictoryScreen(this);
-        setScreen(gameOverScreen);
+        setScreen(gameScreen);
     }
 
     public void setToGameScreen(){
@@ -33,5 +33,9 @@ public class Main extends Game {
 
     public void setToVictoryScreen() {
         setScreen(victoryScreen);
+    }
+
+    public void setToSnakeScreen(){
+
     }
 }
