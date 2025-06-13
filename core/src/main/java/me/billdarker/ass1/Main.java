@@ -20,7 +20,7 @@ public class Main extends Game {
         gameOverScreen = new GameOverScreen(this);
         deathScreen = new DeathScreen(this);
         victoryScreen = new VictoryScreen(this);
-        setScreen(menuScreen);
+        setScreen(gameOverScreen);
     }
 
     public void setToGameScreen(){

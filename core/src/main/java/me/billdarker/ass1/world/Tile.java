@@ -63,11 +63,16 @@ public class Tile {
     public void draw(ShapeRenderer shapeRenderer) {
         Color tileColor = getTileColor();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(0, 0, 0, 1);
-        shapeRenderer.rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-        shapeRenderer.setColor(tileColor);
-        shapeRenderer.rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE*((population/10)));
-
+        if (owner.getType() != playerType.WATER){
+            shapeRenderer.setColor(0, 0, 0, 1);
+            shapeRenderer.rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            shapeRenderer.setColor(tileColor);
+            shapeRenderer.rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE*((population/10)));
+        }
+        else{
+            shapeRenderer.setColor(tileColor);
+            shapeRenderer.rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        }
         shapeRenderer.end();
     }
 
