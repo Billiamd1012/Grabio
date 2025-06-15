@@ -29,7 +29,7 @@ public class GameState implements Screen {
     protected Camera camera;
     protected float lastUpdateTime = 0f;
     //how often game updates 0.5f = twice a second
-    protected final float updateSpeed = 0.2f;
+    protected final float updateSpeed = 0.1f;
 
     public GameState(Main game) {
         this.game = game;

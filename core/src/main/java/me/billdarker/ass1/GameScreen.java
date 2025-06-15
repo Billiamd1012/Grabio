@@ -3,20 +3,13 @@ package me.billdarker.ass1;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
-import me.billdarker.ass1.overlay.Camera;
+import com.badlogic.gdx.input.GestureDetector;
+
 import me.billdarker.ass1.overlay.InputDetector;
 import me.billdarker.ass1.overlay.TouchHandler;
 import me.billdarker.ass1.overlay.Overlay;
-import me.billdarker.ass1.world.BotManager;
-import me.billdarker.ass1.world.Map;
-import me.billdarker.ass1.world.Player;
-import me.billdarker.ass1.world.WaterSpawn;
-import me.billdarker.ass1.world.playerType;
+
 
 public class GameScreen extends GameState implements Screen {
     /**
@@ -62,13 +55,11 @@ public class GameScreen extends GameState implements Screen {
         player.getTerritory().setAttackPercentage(overlay.getAttackPercentage());
 
         if (player.getTiles().isEmpty()){
-            if (player.hasSnaked){
-                game.setToGameOverScreen();
-            }
-            else {
-                player.hasSnaked = true;
-                game.setToSnakeScreen();
-            }
+            game.setToSnakeScreen();
+        }
+
+        if (map.checkPlayerWin()){
+            game.setToVictoryScreen();
         }
     }
 

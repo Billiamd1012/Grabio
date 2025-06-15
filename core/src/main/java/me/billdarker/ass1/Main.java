@@ -9,7 +9,6 @@ public class Main extends Game {
     public static MenuScreen menuScreen;
     public static AboutScreen aboutScreen;
     public static GameOverScreen gameOverScreen;
-    public static DeathScreen deathScreen;
     public static VictoryScreen victoryScreen;
     public static SnakeScreen snakeScreen;
 
@@ -22,7 +21,7 @@ public class Main extends Game {
         gameOverScreen = new GameOverScreen(this);
         victoryScreen = new VictoryScreen(this);
         snakeScreen = new SnakeScreen(this);
-        setScreen(gameScreen);
+        setScreen(menuScreen);
     }
 
     public void setToGameScreen(){

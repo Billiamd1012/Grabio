@@ -167,7 +167,7 @@ public class SnakeScreen extends GameState implements Screen {
     public void update(){
         snakeController.move();
         if (snakeController.hasGoal()){
-            game.setToGameScreen();
+            game.setToVictoryScreen();
         }
         if (snakeController.hasDied()){
             game.setToGameOverScreen();

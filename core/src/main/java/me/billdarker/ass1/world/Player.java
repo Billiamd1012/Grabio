@@ -32,7 +32,7 @@ public class Player {
                 growthMultiplier = 0.1f;
                 break;
             case BOT:
-                growthMultiplier = 20f;
+                growthMultiplier = 0.8f;
                 break;
             case WATER:
                 growthMultiplier = 0;

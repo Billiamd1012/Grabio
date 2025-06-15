@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Map {
@@ -17,7 +16,7 @@ public class Map {
      */
     private final int width;
     private final int height;
-    private Player wild;
+    private final Player wild;
     private final Tile[][] tiles; // 2D array to store tiles
     private static final int TILE_SIZE = 32; // Size of each tile in pixels
 
@@ -27,15 +26,15 @@ public class Map {
         this.tiles = new Tile[width][height];
         wild = new Player(this, playerType.WILD, "Wild"); // Create a neutral player for unowned tiles
 
-        for(int x = 0; x < getWidth(); x++) {
-            for(int y = 0; y < getHeight(); y++) {
+        for (int x = 0; x < getWidth(); x++) {
+            for (int y = 0; y < getHeight(); y++) {
                 // If x+y is even, set to green (0), if odd set to gray (1)
                 spawnTile(x, y, (x + y) % 2 == 0 ? 0 : 1, wild);
             }
         }
     }
 
-    public void update(){
+    public void update() {
         wild.update();
     }
 
@@ -49,10 +48,12 @@ public class Map {
             owner.addTile(tiles[x][y]);
         }
     }
-    public void tapTile(Player _player, int x, int y){
+
+    public void tapTile(Player _player, int x, int y) {
         Tile tile = getTile(x, y);
         _player.attack(tile);
     }
+
     public Tile getTile(int x, int y) {
         if (x >= 0 && x < width && y >= 0 && y < height) {
             return tiles[x][y];
@@ -94,25 +95,12 @@ public class Map {
         camera.unproject(worldCoords);
 
         // Convert world coordinates to tile coordinates
-        int tileX = (int)(worldCoords.x / TILE_SIZE);
-        int tileY = (int)(worldCoords.y / TILE_SIZE);
+        int tileX = (int) (worldCoords.x / TILE_SIZE);
+        int tileY = (int) (worldCoords.y / TILE_SIZE);
 
         return new int[]{tileX, tileY};
     }
 
-    public List<Tile> getTiles(Player player) {
-        List<Tile> playerTiles = new ArrayList<>();
-
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                if (tiles[x][y] != null && tiles[x][y].owner == player) {
-                    playerTiles.add(tiles[x][y]);
-                }
-            }
-        }
-
-        return playerTiles;
-    }
 
     public boolean isAdjacent(Player attacking, Tile tile) {
         List<Tile> attackingTiles = attacking.getTiles();
@@ -131,11 +119,11 @@ public class Map {
         return false;
     }
 
-    public boolean isBordering(Player attacking, Tile tile){
+    public boolean isBordering(Player attacking, Tile tile) {
         List<Tile> attackingTiles = attacking.getTiles();
         for (Tile attackTile : attackingTiles) {
-            if (areTilesAdjacent(attackTile, tile)){
-                return  true;
+            if (areTilesAdjacent(attackTile, tile)) {
+                return true;
             }
         }
         return false;
@@ -147,11 +135,25 @@ public class Map {
         return (dx == 1 && dy == 0) || (dx == 0 && dy == 1);
     }
 
-    public void setMaxPopulation(){
-        for (Tile[] row : tiles){
-            for (Tile tile: row){
+    public void setMaxPopulation() {
+        for (Tile[] row : tiles) {
+            for (Tile tile : row) {
                 tile.setMaxPopulation();
             }
         }
     }
+
+    public boolean checkPlayerWin() {
+        boolean playerWin = true;
+        for(Tile[] row : tiles) {
+            for (Tile tile: row) {
+                if (tile.owner.getType() == playerType.BOT || tile.owner.getType() == playerType.WILD) {
+                    playerWin = false;
+                    break;
+                }
+            }
+        }
+        return playerWin;
+    }
 }
+
