@@ -60,6 +60,16 @@ public class GameScreen extends GameState implements Screen {
 
         // Update territory attack percentage from overlay
         player.getTerritory().setAttackPercentage(overlay.getAttackPercentage());
+
+        if (player.getTiles().isEmpty()){
+            if (player.hasSnaked){
+                game.setToGameOverScreen();
+            }
+            else {
+                player.hasSnaked = true;
+                game.setToSnakeScreen();
+            }
+        }
     }
 
     @Override

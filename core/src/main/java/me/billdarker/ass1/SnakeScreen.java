@@ -1,5 +1,6 @@
 package me.billdarker.ass1;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
 import me.billdarker.ass1.world.Map;
@@ -14,6 +15,6 @@ public class SnakeScreen extends GameState implements Screen {
         super(main);
     }
     public void update(){
-
+        Gdx.app.log("Snake","Snake update called");
     }
 }

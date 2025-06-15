@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Player {
     private String name;
+    public boolean hasSnaked = false;
     private playerType type;
     private final Territory territory;
     protected final Map map;
@@ -19,7 +20,7 @@ public class Player {
                 growthMultiplier = 1f;
                 break;
             case WILD:
-                growthMultiplier = 0.2f;
+                growthMultiplier = 0.1f;
                 break;
             case BOT:
                 growthMultiplier = 0.8f;

@@ -11,6 +11,8 @@ public class Main extends Game {
     public static GameOverScreen gameOverScreen;
     public static DeathScreen deathScreen;
     public static VictoryScreen victoryScreen;
+    public static SnakeScreen snakeScreen;
+
 
     @Override
     public void create() {
@@ -18,8 +20,8 @@ public class Main extends Game {
         gameScreen = new GameScreen(this);
         aboutScreen = new AboutScreen(this);
         gameOverScreen = new GameOverScreen(this);
-        deathScreen = new DeathScreen(this);
         victoryScreen = new VictoryScreen(this);
+        snakeScreen = new SnakeScreen(this);
         setScreen(gameScreen);
     }
 
@@ -27,8 +29,8 @@ public class Main extends Game {
         setScreen(gameScreen);
     }
 
-    public void setToDeathScreen() {
-        setScreen(deathScreen);
+    public void setToGameOverScreen() {
+        setScreen(gameOverScreen);
     }
 
     public void setToVictoryScreen() {
@@ -36,6 +38,6 @@ public class Main extends Game {
     }
 
     public void setToSnakeScreen(){
-
+        setScreen(snakeScreen);
     }
 }

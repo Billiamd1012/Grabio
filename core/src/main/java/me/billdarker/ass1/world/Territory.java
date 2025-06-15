@@ -21,7 +21,6 @@ public class Territory {
     private static final float TERRITORY_INFLUENCE = 0.3f; // How much territory population influences tile growth
 
     private List<Attack> attacks = new ArrayList<>();
-    private float currentGrowthRate = 0f; // Track current growth rate
     private float troopsAddedThisUpdate = 0f; // Track actual troops added
 
     public Territory(Player owner, Map map) {
@@ -52,7 +51,6 @@ public class Territory {
     public void update() {
         if (tiles.isEmpty()) {
             population = MIN_POPULATION;
-            currentGrowthRate = 0f;
             troopsAddedThisUpdate = 0f;
             return;
         }
@@ -92,10 +90,8 @@ public class Territory {
 
         // Calculate current growth rate as percentage and actual troops added
         if (previousPopulation > 0) {
-            currentGrowthRate = ((population - previousPopulation) / previousPopulation) * 100f;
             troopsAddedThisUpdate = population - previousPopulation;
         } else {
-            currentGrowthRate = 0f;
             troopsAddedThisUpdate = 0f;
         }
 
@@ -120,6 +116,7 @@ public class Territory {
                 if (attack.isComplete()) {
                     completedAttacks.add(attack);
                 }
+
             }
             attacks.removeAll(completedAttacks);
         }
@@ -164,9 +161,6 @@ public class Territory {
         return new ArrayList<>(tiles);
     }
 
-    public Player getOwner() {
-        return owner;
-    }
 
     public void attack(Tile tile) {
         if (tile == null || tile.owner == this.owner) {
@@ -187,7 +181,7 @@ public class Territory {
 
         // Create attack first to ensure it's valid
         Attack newAttack = new Attack(this.owner, tile.owner, attackingTroops, tile, map);
-        
+
         // Only reduce population if attack was created successfully
         if (newAttack != null) {
             // Distribute attacking troops proportionally to tile populations
@@ -246,9 +240,6 @@ public class Territory {
         this.attackPercentage = percentage;
     }
 
-    public float getCurrentGrowthRate() {
-        return currentGrowthRate;
-    }
 
     public float getTroopsAddedThisUpdate() {
         return troopsAddedThisUpdate;

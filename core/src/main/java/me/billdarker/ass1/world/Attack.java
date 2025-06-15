@@ -64,8 +64,4 @@ public class Attack {
     public boolean isComplete() {
         return isComplete;
     }
-
-    public float getAttackingTroops() {
-        return attackingTroops;
-    }
 }

@@ -3,6 +3,8 @@ package me.billdarker.ass1.world;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+import com.badlogic.gdx.math.MathUtils;
+
 enum TERRAIN {
     //high growth low defense
     GRASS,
@@ -29,13 +31,18 @@ public class Tile {
     private static final int TILE_SIZE = 32; // Size of each tile in pixels
     private final int x, y;
     private static final float MIN_POPULATION = 1f;
+    private static final float MAX_POPULATION = 10f;
 
     public Tile(Player _owner, int _terrainType, int _x, int _y) {
         this.x = _x;
         this.y = _y;
         this.owner = _owner;
-        this.population = MIN_POPULATION;
-
+        if (owner.getType() == playerType.WILD){
+            this.population = MAX_POPULATION;
+        }
+        else{
+            this.population = MIN_POPULATION;
+        }
         switch (_terrainType) {
             case 0:
                 terrain = TERRAIN.GRASS;
@@ -81,7 +88,7 @@ public class Tile {
             //TODO: get colour from player
             return Color.RED;
         } else if (owner.getType() == playerType.BOT) {
-            return Color.CORAL;
+            return new Color(MathUtils.random.nextFloat(1f),1f,1f,1f);
         } else if (owner.getType() == playerType.WATER){
             return Color.BLUE;
         }
