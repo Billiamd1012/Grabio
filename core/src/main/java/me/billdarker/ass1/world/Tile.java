@@ -88,7 +88,7 @@ public class Tile {
             //TODO: get colour from player
             return Color.RED;
         } else if (owner.getType() == playerType.BOT) {
-            return new Color(MathUtils.random.nextFloat(1f),1f,1f,1f);
+            return owner.getColor();
         } else if (owner.getType() == playerType.WATER){
             return Color.BLUE;
         }
@@ -143,5 +143,9 @@ public class Tile {
 
     public float getDefenseRate(){
         return defenseRate;
+    }
+
+    public void setMaxPopulation(){
+        this.population = MAX_POPULATION;
     }
 }

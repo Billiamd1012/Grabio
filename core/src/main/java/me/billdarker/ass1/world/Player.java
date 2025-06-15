@@ -1,5 +1,8 @@
 package me.billdarker.ass1.world;
 
+import com.badlogic.gdx.graphics.Color;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
@@ -9,6 +12,12 @@ public class Player {
     private final Territory territory;
     protected final Map map;
     private float growthMultiplier;
+
+    private int startX;
+    private int startY;
+
+    protected List<Player> playerKilled = new ArrayList<Player>();
+    private boolean killedPlayer = false;
 
     public Player(Map _map, playerType _type, String _name) {
         map = _map;
@@ -23,7 +32,7 @@ public class Player {
                 growthMultiplier = 0.1f;
                 break;
             case BOT:
-                growthMultiplier = 0.8f;
+                growthMultiplier = 20f;
                 break;
             case WATER:
                 growthMultiplier = 0;
@@ -32,6 +41,8 @@ public class Player {
     }
 
     public void setStart(int x, int y) {
+        startX = x;
+        startY = y;
         map.setOwner(x, y, this);
         // Add the tile to the territory
         Tile startTile = map.getTile(x, y);
@@ -82,5 +93,28 @@ public class Player {
 
     public Territory getTerritory() {
         return territory;
+    }
+
+    public Color getColor() {
+        return null;
+    }
+
+    public int getStartX() {
+        return startX;
+    }
+
+    public int getStartY() {
+        return startY;
+    }
+
+    public void addKilled(Player killed){
+        playerKilled.add(killed);
+        if (killed.getType() == playerType.PLAYER){
+            killedPlayer = true;
+        }
+    }
+
+    public boolean killedPlayer(){
+        return killedPlayer;
     }
 }

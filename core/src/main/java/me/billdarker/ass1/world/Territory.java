@@ -223,6 +223,9 @@ public class Territory {
                 tile.setPopulation(leftOverTroopsOnTile);
                 attacker.addTile(tile);
                 removeTile(tile);
+                if (tiles.isEmpty()){
+                    attacker.addKilled(owner);
+                }
             } else {
                 // Tile successfully defended
                 float casualties = attackingPerTile / tile.getDefenseRate();

@@ -46,6 +46,7 @@ public class GameOverScreen implements Screen {
         ImageButton Play_Again_Button = new ImageButton(drawable_play_again);
 
 
+        Gdx.input.setInputProcessor(stage);
 
         table.add(gamoverImage).size(1200, 400).center().pad(10);
         table.row();

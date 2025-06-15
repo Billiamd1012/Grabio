@@ -29,6 +29,8 @@ public class VictoryScreen implements Screen {
     public void show() {
         batch = new SpriteBatch();
         stage = new Stage();
+        Gdx.input.setInputProcessor(stage);
+
 
         // Create victory message
         Label label = new Label("Victory!", new Label.LabelStyle(font, Color.GREEN));

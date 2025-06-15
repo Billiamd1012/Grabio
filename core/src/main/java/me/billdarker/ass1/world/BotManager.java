@@ -29,4 +29,8 @@ public class BotManager {
             bot.update();
         }
     }
+
+    public ArrayList<Bot> getBots(){
+        return bots;
+    }
 }

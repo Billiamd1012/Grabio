@@ -147,7 +147,11 @@ public class Map {
         return (dx == 1 && dy == 0) || (dx == 0 && dy == 1);
     }
 
-    public void attack(Territory attacker){
-
+    public void setMaxPopulation(){
+        for (Tile[] row : tiles){
+            for (Tile tile: row){
+                tile.setMaxPopulation();
+            }
+        }
     }
 }

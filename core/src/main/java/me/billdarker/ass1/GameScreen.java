@@ -74,7 +74,6 @@ public class GameScreen extends GameState implements Screen {
 
     @Override
     public void dispose() {
-        super.dispose();
         overlay.dispose();
     }
 }
