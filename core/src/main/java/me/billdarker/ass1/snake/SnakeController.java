@@ -68,6 +68,11 @@ public class SnakeController {
 
             return true;
         }
+
+        //or water
+        if (map.getTile(x,y).owner.getType() == playerType.WATER){
+            return true;
+        }
         //has not hit edge of bot
         boolean hitBotBorder = true;
         for (Tile tile : map.getTile(x,y).owner.getTiles()){

@@ -19,6 +19,7 @@ public class BotManager {
                 //TODO: add random bot names
                 Bot nextBot = new Bot(_map,playerType.BOT,"BOT");
                 map.setOwner(randomX,randomY,nextBot);
+                nextBot.setStart(randomX,randomY);
                 bots.add(nextBot);
             }
         }

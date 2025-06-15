@@ -1,5 +1,6 @@
 package me.billdarker.ass1.world;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -75,11 +76,18 @@ public class Tile {
             shapeRenderer.rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
             shapeRenderer.setColor(tileColor);
             shapeRenderer.rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE*((population/10)));
+
+            if (owner.getStartX() == x && owner.getStartY() == y){
+                shapeRenderer.setColor(Color.WHITE);
+                shapeRenderer.circle(x * TILE_SIZE+(int)(TILE_SIZE/2), y * TILE_SIZE+(int)(TILE_SIZE/2), (int)(TILE_SIZE/2), (int)(TILE_SIZE/2));
+            }
         }
         else{
+            //is on starting tile
+
             shapeRenderer.setColor(tileColor);
             shapeRenderer.rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-        }
+            }
         shapeRenderer.end();
     }
 
